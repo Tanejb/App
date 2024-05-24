@@ -79,9 +79,19 @@
           </div>
           <a href="/contact" class="nav-item nav-link">Contact</a>
         </div>
-        <a href="/register" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block"
-          >Join Now<i class="fa fa-arrow-right ms-3"></i
-        ></a>
+        <% if (session && session.user) { %>
+        <!-- Če je uporabnik prijavljen, prikaži gumb za odjavo -->
+        <form action="/logout" method="post">
+          <button type="submit" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">
+            Log out<i class="fa fa-arrow-right ms-3"></i>
+          </button>
+        </form>
+        <% } else { %>
+        <!-- Če uporabnik ni prijavljen, prikaži gumb za prijavo -->
+        <a href="/register" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">
+          Join Now<i class="fa fa-arrow-right ms-3"></i>
+        </a>
+        <% } %>
       </div>
     </nav>
     <!-- Navbar End -->

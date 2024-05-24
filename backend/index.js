@@ -3,11 +3,28 @@ const path = require('path');
 const app = express();
 const bodyParser = require('body-parser');
 const firebaseAdmin = require('firebase-admin');
-const { getAuth, createUserWithEmailAndPassword } = require('firebase/auth');
+const session = require('express-session');
+const {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} = require('firebase/auth');
 
+app.use(
+  session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Uporabite true za HTTPS
+  })
+);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use((req, res, next) => {
+  res.locals.session = req.session;
+  next();
+});
 app.set('view engine', 'ejs');
 
 const { initializeApp } = require('firebase/app');
@@ -99,12 +116,23 @@ app.post('/submit-login', async (req, res) => {
 
     // Optionally, you can add any additional login logic here, such as
     // creating a session or redirecting to a specific page.
-
+    req.session.user = { email: user.email, uid: user.uid };
+    console.log('Session set:', req.session.user);
     res.redirect('/'); // Redirect to home or another page after login
   } catch (error) {
     console.error('Error logging in user:', error);
     res.status(401).send('Error logging in user');
   }
+});
+
+app.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error destroying session:', err);
+      return res.status(500).send('Error destroying session');
+    }
+    res.redirect('/login'); // Redirect to login page after logout
+  });
 });
 
 app.get('/categories', async (req, res) => {
