@@ -41,6 +41,10 @@ app.get('/register', (req, res) => {
   res.render('register');
 });
 
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
 app.post('/submit-register', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -60,7 +64,7 @@ app.post('/submit-register', async (req, res) => {
       createdAt: new Date(),
     });
 
-    res.redirect('/'); // Redirect to home or another page after registration
+    res.redirect('/login'); // Redirect to home or another page after registration
   } catch (error) {
     console.error('Error registering user:', error);
     res.status(500).send('Error registering user');
@@ -81,6 +85,26 @@ app.post('/submit-register', async (req, res) => {
     console.error('Error registering user:', error);
     res.status(500).send('Error registering user');
   } */
+});
+
+app.post('/submit-login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).send('Email and password are required');
+  }
+
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Optionally, you can add any additional login logic here, such as
+    // creating a session or redirecting to a specific page.
+
+    res.redirect('/'); // Redirect to home or another page after login
+  } catch (error) {
+    console.error('Error logging in user:', error);
+    res.status(401).send('Error logging in user');
+  }
 });
 
 app.get('/categories', async (req, res) => {

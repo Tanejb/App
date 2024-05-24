@@ -40,7 +40,7 @@ submit.addEventListener('click', function (event) {
       // Signed up
       const user = userCredential.user;
       alert('Logging in...');
-      window.location.href = 'index.html';
+      window.location.href = '/';
       // ...
     })
     .catch((error) => {
