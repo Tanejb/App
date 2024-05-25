@@ -18,7 +18,9 @@ app.use(
     cookie: { secure: false }, // Uporabite true za HTTPS
   })
 );
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../frontend/public')));
+app.set('views', path.join(__dirname, '../frontend/views'));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
@@ -45,7 +47,7 @@ const db = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
 
 // Firebase Admin configuration
-const serviceAccount = require('./serviceAccountKey.json');
+const serviceAccount = require('../backend/serviceAccountKey.json');
 
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount),
