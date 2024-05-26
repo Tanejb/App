@@ -4,11 +4,84 @@ const app = express();
 const bodyParser = require('body-parser');
 const firebaseAdmin = require('firebase-admin');
 const session = require('express-session');
+const PORT = process.env.PORT || 3000;
+const http = require('http');
+const server = http.createServer(app);
+const socketio = require('socket.io');
+const formatMessage = require('./utils/messages');
+const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/users');
+const io = socketio(server);
 const {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } = require('firebase/auth');
+const { initializeApp } = require('firebase/app');
+const {
+  getFirestore,
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  query,
+  where,
+  addDoc,
+} = require('firebase/firestore');
+const firebaseConfig = require('./firebaseConfig');
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const auth = getAuth(firebaseApp);
+
+const botName = 'Admin ';
+// Run when client connects
+io.on('connection', (socket) => {
+  socket.on('joinRoom', ({ username, room }) => {
+    const user = userJoin(socket.id, username, room);
+    socket.join(user.room);
+    // Welcome current user
+    socket.emit('message', formatMessage(botName, ' Welcome to Chat'));
+
+    // Broadcast when user connects
+    socket.broadcast
+      .to(user.room)
+      .emit('message', formatMessage(botName, `${user.username}  has joined the chat`));
+
+    // Send users and room info
+    io.to(user.room).emit('roomUsers', {
+      room: user.room,
+      users: getRoomUsers(user.room),
+    });
+  });
+
+  // Listen for ChatMessage
+  socket.on('chatMessage', (msg) => {
+    const user = getCurrentUser(socket.id);
+
+    io.to(user.room).emit('message', formatMessage(user.username, msg));
+  });
+
+  // Runs when client disconnects
+  socket.on('disconnect', () => {
+    const user = userLeave(socket.id);
+
+    if (user) {
+      io.to(user.room).emit(
+        'message',
+        formatMessage(botName, `${user.username} has left the chat`)
+      );
+
+      // Send users and room info
+      io.to(user.room).emit('roomUsers', {
+        room: user.room,
+        users: getRoomUsers(user.room),
+      });
+    }
+  });
+});
+
+// Firebase Admin configuration
+const serviceAccount = require('../backend/serviceAccountKey.json');
 
 app.use(
   session({
@@ -29,26 +102,6 @@ app.use((req, res, next) => {
 });
 app.set('view engine', 'ejs');
 
-const { initializeApp } = require('firebase/app');
-const {
-  getFirestore,
-  collection,
-  getDocs,
-  getDoc,
-  doc,
-  query,
-  where,
-  addDoc,
-} = require('firebase/firestore');
-const firebaseConfig = require('./firebaseConfig');
-
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
-const auth = getAuth(firebaseApp);
-
-// Firebase Admin configuration
-const serviceAccount = require('../backend/serviceAccountKey.json');
-
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount),
 });
@@ -62,6 +115,14 @@ app.get('/register', (req, res) => {
 
 app.get('/login', (req, res) => {
   res.render('login');
+});
+
+app.get('/chatroom', (req, res) => {
+  res.render('chatroom');
+});
+
+app.get('/chat', (req, res) => {
+  res.render('chat');
 });
 
 app.post('/submit-register', async (req, res) => {
@@ -129,6 +190,7 @@ app.post('/submit-login', async (req, res) => {
 
 app.post('/logout', (req, res) => {
   req.session.destroy((err) => {
+    console.log('Session destroyed.');
     if (err) {
       console.error('Error destroying session:', err);
       return res.status(500).send('Error destroying session');
@@ -255,6 +317,6 @@ app.post('/submit-quiz/:id', async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log(`Strežnik posluša na portu 3000`);
+server.listen(PORT, () => {
+  console.log(`Strežnik posluša na portu ${PORT}`);
 });
