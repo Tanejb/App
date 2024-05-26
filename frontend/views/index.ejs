@@ -79,6 +79,9 @@
             </div>
           </div>
           <a href="/contact" class="nav-item nav-link">Contact</a>
+          <% if (session && session.user) { %>
+            <a href="/profile/<%= session.user.uid %>" class="nav-item nav-link">Profile</a>
+        <% } %>
         </div>
         <% if (session && session.user) { %>
         <!-- Če je uporabnik prijavljen, prikaži gumb za odjavo -->

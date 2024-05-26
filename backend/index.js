@@ -26,6 +26,7 @@ const {
   query,
   where,
   addDoc,
+  setDoc
 } = require('firebase/firestore');
 const firebaseConfig = require('./firebaseConfig');
 
@@ -123,6 +124,10 @@ app.get('/chatroom', (req, res) => {
 
 app.get('/chat', (req, res) => {
   res.render('chat');
+});
+
+app.get('/profile', (req, res) => {
+  res.render('profile');
 });
 
 app.post('/submit-register', async (req, res) => {
@@ -271,12 +276,17 @@ app.post('/submit-quiz/:id', async (req, res) => {
   const quizId = req.params.id;
   const userAnswers = req.body;
 
+  if(!req.session.user) {
+    return res.status(401).send('You have to be logged in to submit a quiz');
+  }
+
   try {
     const quizRef = doc(db, 'quizzes', quizId);
     const quizDoc = await getDoc(quizRef);
     if (!quizDoc.exists()) {
       return res.status(404).send('Kviz ne obstaja');
     }
+    const quizData = quizDoc.data();
 
     const questionsRef = collection(db, 'questions');
     const q = query(questionsRef, where('quizId', '==', quizRef));
@@ -293,22 +303,43 @@ app.post('/submit-quiz/:id', async (req, res) => {
       const isCorrect = parseInt(userAnswer) === correctAnswer;
 
       if (isCorrect) {
-        score += 10;
+        score += question.value;
       }
 
       return {
         question: question.question,
         correctAnswer: question.options[correctAnswer],
         userAnswer: question.options[parseInt(userAnswer)],
-        isCorrect,
+        isCorrect
       };
     });
 
+    // Create a reference to the user's document
+    const userQuery = query(collection(db, 'users'), where('uid', '==', req.session.user.uid));
+    const userSnapshot = await getDocs(userQuery);
+    if (userSnapshot.empty) {
+      console.log(`User document not found for UID: ${req.session.user.uid}`);
+      return res.status(404).send('User does not exist');
+    }
+    const userId = userSnapshot.docs[0].id;
+
+    // Store the result in the results collection with a reference to the user's document ID
     await addDoc(collection(db, 'results'), {
       quizId: quizRef,
+      userId: doc(db, 'users', userId),
       score,
-      completed_at: new Date(),
+      completed_at: new Date()
     });
+
+    // Update the user's score for the specific category
+    const userData = userSnapshot.docs[0].data();
+    const categoryScores = userData.categoryScores || {};
+    const categoryId = quizData.categoryId.id; 
+
+  
+    categoryScores[categoryId] = (categoryScores[categoryId] || 0) + score;
+
+    await setDoc(doc(db, 'users', userId), { categoryScores }, { merge: true });
 
     res.render('quiz-result', { quiz: quizDoc.data(), results, score });
   } catch (error) {
@@ -316,6 +347,73 @@ app.post('/submit-quiz/:id', async (req, res) => {
     res.status(500).send('Notranja napaka strežnika');
   }
 });
+
+app.get('/profile/:uid', async (req, res) => {
+  try {
+    const uid = req.params.uid;
+
+    // Najprej preverimo, ali je uporabnik prijavljen
+    const sessionUser = req.session.user;
+    if (!sessionUser) {
+      return res.redirect('/login');
+    }
+
+    // Poiščemo uporabniški dokument glede na UID
+    const userQuery = query(collection(db, 'users'), where('uid', '==', uid));
+    const userSnapshot = await getDocs(userQuery);
+    if (userSnapshot.empty) {
+      return res.status(404).send('Uporabnik ne obstaja');
+    }
+    
+    // Pridobimo podatke o uporabniku
+    const userDoc = userSnapshot.docs[0];
+    const userData = userDoc.data();
+    const categoryScores = userData.categoryScores || {};
+
+    // Pridobimo podatke o kategorijah in izračunamo nivoje
+    const categories = [];
+    for (const categoryId in categoryScores) {
+      const categoryRef = doc(db, 'categories', categoryId);
+      const categoryDoc = await getDoc(categoryRef);
+      if (categoryDoc.exists()) {
+        const categoryData = categoryDoc.data();
+        const score = categoryScores[categoryId];
+        let level = 1;
+        let pointsToNextLevel = 0;
+
+        if (score < 100) {
+          level = 1;
+          pointsToNextLevel = 100 - score;
+        } else if (score < 300) {
+          level = 2;
+          pointsToNextLevel = 300 - score;
+        } else if (score < 500) {
+          level = 3;
+          pointsToNextLevel = 500 - score;
+        } else {
+          level = 4; // For scores 500 and above
+          pointsToNextLevel = 0; // Assuming there's no next level beyond 3
+        }
+
+        categories.push({
+          id: categoryId,
+          name: categoryData.name,
+          score,
+          level,
+          pointsToNextLevel
+        });
+      }
+    }
+
+    res.render('profile', { user: userData, categories });
+  } catch (error) {
+    console.error('Napaka pri pridobivanju uporabnika:', error);
+    res.status(500).send('Notranja napaka strežnika');
+  }
+});
+
+
+
 
 server.listen(PORT, () => {
   console.log(`Strežnik posluša na portu ${PORT}`);

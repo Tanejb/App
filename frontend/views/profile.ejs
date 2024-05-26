@@ -67,101 +67,25 @@
     </nav>
     <!-- Navbar End -->
 
-    <!-- Header Start -->
-    <div class="container-fluid bg-primary py-5 mb-5 page-header">
-        <div class="container py-5">
-            <div class="row justify-content-center">
-                <div class="col-lg-10 text-center">
-                    <h1 class="display-3 text-white animated slideInDown">Quizzes</h1>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-center">
-                            <li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
-                            <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Quizzes</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Header End -->
-
-
-    <div class="container-xxl py-5 quiz-detail">
-        <div class="container">
-            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h6 class="section-title bg-white text-center text-primary px-3"><%= quiz.title %> Quiz</h6>
-                <h1 class="mb-5">Answer the following questions</h1>
-            </div>
-            <form id="quiz-form" action="/submit-quiz/<%= quiz.id %>" method="POST">
-                <div id="question-container">
-                    <% questions.forEach((question, qIndex) => { %>
-                        <div class="question-item mb-4 question" id="question-<%= qIndex %>" style="display: none;">
-                            <h5 class="mb-3"><%= question.question %></h5>
-                            <% question.options.forEach((option, index) => { %>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="question-<%= question.id %>" id="option-<%= question.id %>-<%= index %>" value="<%= index %>">
-                                    <label class="form-check-label" for="option-<%= question.id %>-<%= index %>">
-                                        <%= option %>
-                                    </label>
-                                </div>
-                            <% }); %>
-                        </div>
-                    <% }); %>
-                </div>
-                <div class="navigation-buttons mt-3">
-                    <button class="btn btn-secondary" type="button" id="prev-button" onclick="navigateQuestion(-1)" style="display: none;">Previous</button>
-                    <button class="btn btn-secondary" type="button" id="next-button" onclick="navigateQuestion(1)">Next</button>
-                    <button class="btn btn-primary" type="submit" id="submit-button" style="display: none;">Submit Answers</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-    <!-- Courses Start -->
     <div class="container-xxl py-5">
         <div class="container">
-            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h6 class="section-title bg-white text-center text-primary px-3">Courses</h6>
-                <h1 class="mb-5">Popular Courses</h1>
-            </div>
-            <div class="row g-4 justify-content-center">
-                <!-- Example course items - you can replace or loop through course data here -->
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="course-item bg-light">
-                        <div class="position-relative overflow-hidden">
-                            <img class="img-fluid" src="/img/course-1.jpg" alt="">
-                            <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
-                                <a href="#" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end" style="border-radius: 30px 0 0 30px;">Read More</a>
-                                <a href="#" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
-                            </div>
-                        </div>
-                        <div class="text-center p-4 pb-0">
-                            <h3 class="mb-0">$149.00</h3>
-                            <div class="mb-3">
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small class="fa fa-star text-primary"></small>
-                                <small>(123)</small>
-                            </div>
-                            <h5 class="mb-4">Web Design & Development Course for Beginners</h5>
-                        </div>
-                        <div class="d-flex border-top">
-                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-user-tie text-primary me-2"></i>John Doe</small>
-                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-clock text-primary me-2"></i>1.49 Hrs</small>
-                            <small class="flex-fill text-center py-2"><i class="fa fa-user text-primary me-2"></i>30 Students</small>
-                        </div>
-                    </div>
-                </div>
-                <!-- Add more courses similarly -->
-            </div>
+          <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h1 class="mb-5">Profile of <%= user.email %></h1>
+          </div>
+          <div class="profile-details">
+            <h3>Your Progress</h3>
+            <% categories.forEach(category => { %>
+              <div class="category-progress">
+                <h4><%= category.name %></h4>
+                <p>Score: <%= category.score %> points</p>
+                <p>Level: <%= category.level %></p>
+                <p>Points to next level: <%= category.pointsToNextLevel %></p>
+              </div>
+            <% }); %>
+          </div>
         </div>
-    </div>
-    <!-- Courses End -->
-
+      </div>
+    
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-light footer wow fadeIn" data-wow-delay="0.1s">
         <div class="container">
@@ -253,6 +177,5 @@
 
     <!-- Template Javascript -->
     <script src="/js/main.js"></script>
-    <script src="/js/questions.js"></script>
 </body>
 </html>
