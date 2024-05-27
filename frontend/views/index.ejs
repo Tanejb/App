@@ -80,18 +80,18 @@
           </div>
           <a href="/contact" class="nav-item nav-link">Contact</a>
           <% if (session && session.user) { %>
-            <a href="/profile/<%= session.user.uid %>" class="nav-item nav-link">Profile</a>
-        <% } %>
+          <a href="/profile/<%= session.user.uid %>" class="nav-item nav-link">Profile</a>
+          <% } %>
         </div>
         <% if (session && session.user) { %>
-        <!-- Če je uporabnik prijavljen, prikaži gumb za odjavo -->
+        <!-- If user is signed in, show logout button -->
         <form action="/logout" method="post">
           <button type="submit" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">
             Log out<i class="fa fa-arrow-right ms-3"></i>
           </button>
         </form>
         <% } else { %>
-        <!-- Če uporabnik ni prijavljen, prikaži gumb za prijavo -->
+        <!-- If user is not signed in, show the join now button -->
         <a href="/register" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">
           Join Now<i class="fa fa-arrow-right ms-3"></i>
         </a>
@@ -125,9 +125,22 @@
                   <a href="" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft"
                     >Read More</a
                   >
-                  <a href="" class="btn btn-light py-md-3 px-md-5 animated slideInRight"
-                    >Join Now</a
-                  >
+                  <% if (session && session.user) { %>
+                  <!-- If user is signed in, show logout button -->
+                  <form action="/logout" method="post">
+                    <button
+                      type="submit"
+                      class="btn btn-light py-md-3 px-md-5 animated slideInRight"
+                    >
+                      Log out
+                    </button>
+                  </form>
+                  <% } else { %>
+                  <!-- If user is not signed in, show the join now button -->
+                  <a href="/register" class="btn btn-light py-md-3 px-md-5 animated slideInRight">
+                    Join Now
+                  </a>
+                  <% } %>
                 </div>
               </div>
             </div>

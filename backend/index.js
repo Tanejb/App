@@ -26,7 +26,7 @@ const {
   query,
   where,
   addDoc,
-  setDoc
+  setDoc,
 } = require('firebase/firestore');
 const firebaseConfig = require('./firebaseConfig');
 
@@ -193,6 +193,17 @@ app.post('/submit-login', async (req, res) => {
   }
 });
 
+app.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    console.log('Session destroyed.');
+    if (err) {
+      console.error('Error destroying session:', err);
+      return res.status(500).send('Error destroying session');
+    }
+    res.redirect('/login'); // Redirect to login page after logout
+  });
+});
+
 app.post('/logout', (req, res) => {
   req.session.destroy((err) => {
     console.log('Session destroyed.');
@@ -276,7 +287,7 @@ app.post('/submit-quiz/:id', async (req, res) => {
   const quizId = req.params.id;
   const userAnswers = req.body;
 
-  if(!req.session.user) {
+  if (!req.session.user) {
     return res.status(401).send('You have to be logged in to submit a quiz');
   }
 
@@ -310,7 +321,7 @@ app.post('/submit-quiz/:id', async (req, res) => {
         question: question.question,
         correctAnswer: question.options[correctAnswer],
         userAnswer: question.options[parseInt(userAnswer)],
-        isCorrect
+        isCorrect,
       };
     });
 
@@ -328,15 +339,14 @@ app.post('/submit-quiz/:id', async (req, res) => {
       quizId: quizRef,
       userId: doc(db, 'users', userId),
       score,
-      completed_at: new Date()
+      completed_at: new Date(),
     });
 
     // Update the user's score for the specific category
     const userData = userSnapshot.docs[0].data();
     const categoryScores = userData.categoryScores || {};
-    const categoryId = quizData.categoryId.id; 
+    const categoryId = quizData.categoryId.id;
 
-  
     categoryScores[categoryId] = (categoryScores[categoryId] || 0) + score;
 
     await setDoc(doc(db, 'users', userId), { categoryScores }, { merge: true });
@@ -364,7 +374,7 @@ app.get('/profile/:uid', async (req, res) => {
     if (userSnapshot.empty) {
       return res.status(404).send('Uporabnik ne obstaja');
     }
-    
+
     // Pridobimo podatke o uporabniku
     const userDoc = userSnapshot.docs[0];
     const userData = userDoc.data();
@@ -400,7 +410,7 @@ app.get('/profile/:uid', async (req, res) => {
           name: categoryData.name,
           score,
           level,
-          pointsToNextLevel
+          pointsToNextLevel,
         });
       }
     }
@@ -411,9 +421,6 @@ app.get('/profile/:uid', async (req, res) => {
     res.status(500).send('Notranja napaka strežnika');
   }
 });
-
-
-
 
 server.listen(PORT, () => {
   console.log(`Strežnik posluša na portu ${PORT}`);
