@@ -1,7 +1,7 @@
 /* Slog za gumb za pomoč */
 #helpButton {
     position: fixed;
-    bottom: 80px;
+    bottom: 120px;
     right: 20px;
     background-color: #007bff;
     color: white;
@@ -25,12 +25,12 @@
 }
 /* Slog za modalno okno */
 #chatModal {
-    display: none;
+    display: block; /* Spremenjeno iz 'none' v 'block', da je modal privzeto odprt */
     position: fixed;
-    bottom: 150px;
+    bottom: 200px;
     right: 20px;
     width: 300px;
-    height: 400px;
+    height: 500px;
     background: white;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
