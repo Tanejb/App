@@ -1,5 +1,8 @@
 const express = require('express');
 const path = require('path');
+require('dotenv').config();
+
+
 const app = express();
 const bodyParser = require('body-parser');
 const firebaseAdmin = require('firebase-admin');
@@ -33,6 +36,7 @@ const firebaseConfig = require('./firebaseConfig');
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
+
 
 const botName = 'Admin ';
 // Run when client connects
@@ -357,6 +361,59 @@ app.post('/submit-quiz/:id', async (req, res) => {
     res.status(500).send('Notranja napaka strežnika');
   }
 });
+
+app.post('/api/get-answer', async (req, res) => {
+  const { question } = req.body;
+
+  const API_KEY = process.env.OPENAI_API_KEY;
+  const API_URL = 'https://zukijourney.xyzbot.net/v1/chat/completions';
+
+  const requestBody = {
+    stream: false,
+    model: 'gpt-4',
+    response_format: { type: 'json_object' },
+    messages: [
+      {
+        role: 'user',
+        content: `${question}`,
+      },
+    ],
+    max_tokens: 150,
+  };
+
+  try {
+    console.log('Sending request to API with body:', requestBody);
+
+    const fetch = (await import('node-fetch')).default; // Uporabi dinamični import
+
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${API_KEY}`,
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const data = await response.json(); // Parse response as JSON
+
+    if (!response.ok) {
+      console.error('Error from API:', data);
+      return res.status(response.status).json({ error: data });
+    }
+
+    console.log('Received response from API:', data);
+
+    // Extract the answer from the response
+    const answer = data.choices[0].message.content;
+
+    res.json({ answer }); // Send the answer to the client
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Error fetching the answer' });
+  }
+});
+
 
 app.get('/profile/:uid', async (req, res) => {
   try {

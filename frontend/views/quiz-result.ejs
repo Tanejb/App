@@ -37,6 +37,17 @@
 
     <!-- Template Stylesheet -->
     <link href="/css/style.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/css/aibot.css">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+   <!-- Vključitev Font Awesome za ikone -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+   <!-- Vključitev Google Fonts -->
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+
+
   </head>
 
   <body>
@@ -143,7 +154,21 @@
           <% }); %>
         </div>
       </div>
+
+      <button id="helpButton"><i class="fas fa-question"></i></button>
+
+      <!-- Modal za pogovor z botom -->
+      <div id="chatModal">
+          <button id="closeButton">&times;</button>
+          <h2>Chat with bot</h2>
+          <div id="chatBox"></div>
+          <input type="text" id="userInput" placeholder="Enter a question...">
+          <button id="sendButton">Send</button>
+      </div>
+
+
     </div>
+  
 
     <!-- Courses Start -->
     <div class="container-xxl py-5">
@@ -316,5 +341,8 @@
 
     <!-- Template Javascript -->
     <script src="/js/main.js"></script>
+
+    <script src="/js/aibot.js"></script>
+
   </body>
 </html>

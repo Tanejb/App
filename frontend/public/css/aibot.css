@@ -1,0 +1,87 @@
+/* Slog za gumb za pomoč */
+#helpButton {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure the button is on top */
+}
+#helpButton i {
+    margin: 0;
+}
+#helpButton:hover {
+    background-color: #0056b3;
+}
+/* Slog za modalno okno */
+#chatModal {
+    display: none;
+    position: fixed;
+    bottom: 150px;
+    right: 20px;
+    width: 300px;
+    height: 400px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000; /* Ensure the modal is on top */
+}
+#chatModal h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+#chatBox {
+    flex: 1;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+}
+#userInput {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+#sendButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+#sendButton:hover {
+    background-color: #0056b3;
+}
+/* Slog za zapiralni gumb */
+#closeButton {
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 20px;
+    cursor: pointer;
+    align-self: flex-end;
+}
+#closeButton:hover {
+    color: #000;
+}
