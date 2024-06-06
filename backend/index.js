@@ -152,7 +152,6 @@ app.post('/submit-register', async (req, res) => {
       email: userRecord.email,
       createdAt: new Date(),
     });
-
     res.redirect('/login'); // Redirect to home or another page after registration
   } catch (error) {
     console.error('Error registering user:', error);
@@ -236,8 +235,35 @@ app.get('/categories', async (req, res) => {
 });
 
 app.get('/categories/:id', async (req, res) => {
-  const categoryId = req.params.id;
+  
   try {
+    const categoryId = req.params.id;
+    const sessionUser = req.session.user;
+
+    if (!sessionUser) {
+      return res.redirect('/login');
+    }
+    
+    const userQuery = query(collection(db, 'users'), where('uid', '==', sessionUser.uid));
+    const userSnapshot = await getDocs(userQuery);
+    if (userSnapshot.empty) {
+      console.log(`User document not found for UID: ${req.session.user.uid}`);
+      return res.status(404).send('User does not exist');
+    }
+    const userDoc = userSnapshot.docs[0];
+    const userData = userDoc.data();
+    const categoryScores = userData.categoryScores || {};
+    const userScore = categoryScores[categoryId] || 0;
+
+    let userLevel = 1;
+    if (userScore >= 300) {
+      userLevel = 4;
+    } else if (userScore >= 200) {
+      userLevel = 3;
+    } else if (userScore >= 100) {
+      userLevel = 2;
+    }
+
     const categoryRef = doc(db, 'categories', categoryId);
     const categoryDoc = await getDoc(categoryRef);
     if (!categoryDoc.exists()) {
@@ -252,8 +278,10 @@ app.get('/categories/:id', async (req, res) => {
       ...doc.data(),
     }));
 
+    quizzes.sort((a, b) => a.level - b.level);
+
     const category = categoryDoc.data();
-    res.render('categories-details', { category, quizzes });
+    res.render('categories-details', { category, quizzes, userScore, userLevel});
   } catch (error) {
     console.error('Napaka pri pridobivanju kategorije ali kvizov:', error);
     res.status(500).send('Notranja napaka strežnika');
@@ -292,7 +320,7 @@ app.post('/submit-quiz/:id', async (req, res) => {
   const userAnswers = req.body;
 
   if (!req.session.user) {
-    return res.status(401).send('You have to be logged in to submit a quiz');
+    return res.redirect('/login');
   }
 
   try {
@@ -451,15 +479,15 @@ app.get('/profile/:uid', async (req, res) => {
         if (score < 100) {
           level = 1;
           pointsToNextLevel = 100 - score;
-        } else if (score < 300) {
+        } else if (score < 200) {
           level = 2;
-          pointsToNextLevel = 300 - score;
-        } else if (score < 500) {
+          pointsToNextLevel = 200 - score;
+        } else if (score < 300) {
           level = 3;
-          pointsToNextLevel = 500 - score;
+          pointsToNextLevel = 300 - score;
         } else {
-          level = 4; // For scores 500 and above
-          pointsToNextLevel = 0; // Assuming there's no next level beyond 3
+          level = 4; 
+          pointsToNextLevel = 0;
         }
 
         categories.push({
@@ -476,6 +504,37 @@ app.get('/profile/:uid', async (req, res) => {
   } catch (error) {
     console.error('Napaka pri pridobivanju uporabnika:', error);
     res.status(500).send('Notranja napaka strežnika');
+  }
+});
+
+app.get('/add-question', (req, res) => {
+  res.render('add-question'); // Renderiranje strani z obrazcem
+});
+
+app.post('/add-question', async (req, res) => {
+  const { question, value, options, correct_answer, quizId } = req.body;
+
+  try {
+    // Ustvarite referenco za quizId
+    const quizRef = doc(db, quizId);
+
+    // Ustvarite novo vprašanje
+    const newQuestion = {
+      question,
+      value: parseInt(value),
+      options: options,
+      correct_answer: parseInt(correct_answer),
+      quizId: quizRef // Shrani referenco namesto niza
+    };
+
+    // Shranite vprašanje v Firestore
+    const questionRef = doc(collection(db, 'questions'));
+    await setDoc(questionRef, newQuestion);
+
+    res.redirect('/add-question'); 
+  } catch (error) {
+    console.error('Error adding question:', error);
+    res.status(500).send('Error adding question');
   }
 });
 
