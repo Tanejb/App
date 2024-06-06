@@ -252,11 +252,11 @@ app.get('/categories/:id', async (req, res) => {
     const userScore = categoryScores[categoryId] || 0;
 
     let userLevel = 1;
-    if (userScore >= 500) {
+    if (userScore >= 300) {
       userLevel = 4;
-    }else if (userScore >= 300) {
+    } else if (userScore >= 200) {
       userLevel = 3;
-    }else if (userScore >= 100) {
+    } else if (userScore >= 100) {
       userLevel = 2;
     }
 
@@ -422,15 +422,15 @@ app.get('/profile/:uid', async (req, res) => {
         if (score < 100) {
           level = 1;
           pointsToNextLevel = 100 - score;
-        } else if (score < 300) {
+        } else if (score < 200) {
           level = 2;
-          pointsToNextLevel = 300 - score;
-        } else if (score < 500) {
+          pointsToNextLevel = 200 - score;
+        } else if (score < 300) {
           level = 3;
-          pointsToNextLevel = 500 - score;
+          pointsToNextLevel = 300 - score;
         } else {
-          level = 4; // For scores 500 and above
-          pointsToNextLevel = 0; // Assuming there's no next level beyond 3
+          level = 4; 
+          pointsToNextLevel = 0;
         }
 
         categories.push({

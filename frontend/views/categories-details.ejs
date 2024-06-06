@@ -153,7 +153,16 @@
       <% quizzes.forEach(quiz => { %>
         <% 
           const isLocked = quiz.level > userLevel;
-          const pointsNeeded = isLocked ? (quiz.level * 100) - userScore : 0;
+          let pointsNeeded;
+          if (quiz.level === 2) {
+            pointsNeeded = 100 - userScore;
+          } else if (quiz.level === 3) {
+            pointsNeeded = 200 - userScore;
+          } else if (quiz.level === 4) {
+            pointsNeeded = 300 - userScore;
+          } else {
+            pointsNeeded = 0;
+          }
         %>
         <div class="col-lg-4 col-md-6">
           <div class="quiz-item bg-light d-flex flex-column justify-content-center text-center <%= isLocked ? 'locked' : 'unlocked' %>">
