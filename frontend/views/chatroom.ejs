@@ -62,7 +62,6 @@
         <div class="navbar-nav ms-auto p-4 p-lg-0">
           <a href="/" class="nav-item nav-link active">Home</a>
           <a href="/categories" class="nav-item nav-link">Quizzes</a>
-          <a href="/chatroom" class="nav-item nav-link">Chatroom</a>
           <% if (session && session.user) { %>
           <a href="/profile/<%= session.user.uid %>" class="nav-item nav-link">Profile</a>
           <% } %>
