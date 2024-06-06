@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const firebaseAdmin = require('firebase-admin');
 const session = require('express-session');
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 const http = require('http');
 const server = http.createServer(app);
 const socketio = require('socket.io');
@@ -231,6 +231,7 @@ app.get('/categories', async (req, res) => {
 });
 
 app.get('/categories/:id', async (req, res) => {
+  
   try {
     const categoryId = req.params.id;
     const sessionUser = req.session.user;
@@ -238,7 +239,7 @@ app.get('/categories/:id', async (req, res) => {
     if (!sessionUser) {
       return res.redirect('/login');
     }
-
+    
     const userQuery = query(collection(db, 'users'), where('uid', '==', sessionUser.uid));
     const userSnapshot = await getDocs(userQuery);
     if (userSnapshot.empty) {
@@ -253,9 +254,9 @@ app.get('/categories/:id', async (req, res) => {
     let userLevel = 1;
     if (userScore >= 500) {
       userLevel = 4;
-    } else if (userScore >= 300) {
+    }else if (userScore >= 300) {
       userLevel = 3;
-    } else if (userScore >= 100) {
+    }else if (userScore >= 100) {
       userLevel = 2;
     }
 
@@ -276,7 +277,7 @@ app.get('/categories/:id', async (req, res) => {
     quizzes.sort((a, b) => a.level - b.level);
 
     const category = categoryDoc.data();
-    res.render('categories-details', { category, quizzes, userScore, userLevel });
+    res.render('categories-details', { category, quizzes, userScore, userLevel});
   } catch (error) {
     console.error('Napaka pri pridobivanju kategorije ali kvizov:', error);
     res.status(500).send('Notranja napaka strežnika');
@@ -466,14 +467,14 @@ app.post('/add-question', async (req, res) => {
       value: parseInt(value),
       options: options,
       correct_answer: parseInt(correct_answer),
-      quizId: quizRef, // Shrani referenco namesto niza
+      quizId: quizRef // Shrani referenco namesto niza
     };
 
     // Shranite vprašanje v Firestore
     const questionRef = doc(collection(db, 'questions'));
     await setDoc(questionRef, newQuestion);
 
-    res.redirect('/add-question');
+    res.redirect('/add-question'); 
   } catch (error) {
     console.error('Error adding question:', error);
     res.status(500).send('Error adding question');
