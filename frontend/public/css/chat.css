@@ -1,6 +1,6 @@
 /* Slog za celoten chat container */
 #chat {
-  --dark-color-a: #53a8b6; /* Modro-zelen odtenek za --dark-color-a */
+  --dark-color-a: #06BBCC; /* Modro-zelen odtenek za --dark-color-a */
   --dark-color-b: #1c86ee; /* Temnejši modro-zelen odtenek za --dark-color-b */
   --light-color: #f0f8ff; /* Svetlo modro ozadje za --light-color */
   --success-color: #5cb85c;
@@ -39,9 +39,11 @@
 
 /* Chat Page */
 #chat .chat-container {
-  max-width: 1100px;
+  max-width: 1200px; 
+  margin: 150px auto; 
   background: #fff;
-  margin: 30px auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
@@ -63,7 +65,7 @@
 
 #chat .chat-sidebar {
   background: var(--dark-color-a);
-  color: #fff;
+  color: black;
   padding: 20px 20px 60px;
   overflow-y: scroll;
 }

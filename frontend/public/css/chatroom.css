@@ -4,26 +4,35 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #f0f8ff; /* Svetlo modro ozadje */
+  background: linear-gradient(135deg, #f0f8ff 25%, #d1e9f8 100%); /* Gradientno ozadje */
   font-family: 'Nunito', sans-serif;
+  position: relative;
+  overflow: hidden;
 }
 
 /* Slog za join-container */
 .join-container {
-  background: #fff; /* Belo ozadje */
+  background: rgba(255, 255, 255, 0.95); /* Belo ozadje z malo transparentnosti */
   padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 20px; /* Povečana zaobljenost robov */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   text-align: center;
   width: 500px; /* Povečana širina obrazca */
   max-width: 90%; /* Največja širina za mobilne naprave */
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+.join-container:hover {
+  transform: scale(1.02); /* Rahlo povečanje ob lebdenju */
 }
 
 /* Slog za join-header */
 .join-header h1 {
-  font-size: 28px; /* Povečana velikost pisave za naslov */
+  font-size: 32px; /* Povečana velikost pisave za naslov */
   margin-bottom: 30px; /* Povečana spodnja margina */
-  color: #53a8b6; /* Modro-zelen odtenek za naslov */
+  color: #06BBCC; /* Modro-zelen odtenek za naslov */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Blaga senca za besedilo */
 }
 
 /* Slog za join-main */
@@ -41,55 +50,88 @@
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  color: #0056b3; /* Temno modra barva za oznake */
+  color: #333; /* Temnejša barva za oznake */
 }
 
 .form-control input,
 .form-control select {
   width: 100%;
-  padding: 12px; /* Povečan padding za vhodna polja in izbirni meni */
-  border: 1px solid #007bff; /* Modra obroba */
-  border-radius: 5px;
+  padding: 15px; /* Povečan padding za vhodna polja in izbirni meni */
+  border: 1px solid #ccc; /* Nevtralna obroba */
+  border-radius: 10px; /* Povečana zaobljenost robov */
   font-size: 16px;
-  background: #e6f0ff; /* Svetlo modro ozadje za inpute */
+  background: #f9f9f9; /* Svetlo ozadje za inpute */
   color: #333;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control input:focus,
+.form-control select:focus {
+  border-color: #06BBCC; /* Sprememba obrobe ob fokusu */
+  box-shadow: 0 0 8px rgba(6, 187, 204, 0.2); /* Dodana senca ob fokusu */
 }
 
 .form-control input::placeholder {
-  color: #999; /* Siva barva za placeholder besedilo */
+  color: white; /* Svetlejša siva barva za placeholder besedilo */
 }
 
 /* Slog za gumb */
-.btn {
+.btn-join {
   display: inline-block;
-  padding: 12px 24px; /* Povečan padding za gumb */
+  padding: 15px 30px; /* Povečan padding za gumb */
   border: none;
-  border-radius: 5px;
-  background: #53a8b6; /* Modro-zelen odtenek za gumb */
+  border-radius: 50px; /* Zaobljen gumb */
+  background: #06BBCC; /* Modro-zelen odtenek za gumb */
   color: #fff; /* Belo besedilo na gumbu */
   font-size: 18px; /* Povečana velikost pisave za gumb */
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.3s;
 }
 
-.btn:hover {
-  background: #53a8b6; /* Temnejši modro-zelen odtenek za hover stanje gumba */
+.btn-join:hover {
+  background: #05a3b3; /* Temnejši modro-zelen odtenek za hover stanje gumba */
+  transform: translateY(-2px); /* Rahlo premikanje navzgor ob lebdenju */
 }
 
-/* Dodatni slog za responsive dizajn */
-@media (max-width: 768px) {
-  .join-container {
-    width: 90%;
-    padding: 20px;
-  }
+.btn-join:active {
+  transform: translateY(0); /* Povratek na prvotno mesto ob kliku */
+}
 
-  .form-control input,
-  .form-control select {
-    font-size: 14px;
-  }
+/* Slog za ozadje animacije */
+.background-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 100px); /* Dodaj višino footra */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none; /* Onemogoči interakcije z animacijami */
+}
 
-  .btn {
-    padding: 10px 20px;
-    font-size: 16px;
-  }
+.animated-image {
+  position: absolute;
+  width: auto; /* Spremenjena velikost slik */
+  height: 100%;
+  opacity: 0.8;
+}
+
+/* Pozicije slik v ozadju */
+.animated-image:nth-child(1) {
+  left: 0;
+}
+
+.animated-image:nth-child(2) {
+  right: 0;
+}
+
+.animated-image:nth-child(3) {
+  bottom: 0;
+}
+
+.animated-image:nth-child(4) {
+  top: 0;
 }
