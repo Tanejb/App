@@ -38,29 +38,35 @@
     <!-- Template Stylesheet -->
     <link href="/css/style.css" rel="stylesheet" />
 
-    <link rel="stylesheet" href="/css/aibot.css">
+    <link rel="stylesheet" href="/css/aibot.css" />
 
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <!-- Vključitev Font Awesome za ikone -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <!-- Vključitev Google Fonts -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+    />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-   <!-- Vključitev Font Awesome za ikone -->
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-   <!-- Vključitev Google Fonts -->
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <style>
+      .quiz-result {
+        text-align: left;
+        margin-bottom: 50px;
+        font-size: large;
+      }
 
-   <style>
-    .quiz-result {
-      text-align: left;
-      margin-bottom: 50px;
-      font-size: large;
-    }
-
-    #result-container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-  </style>
-
-
+      #result-container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+    </style>
   </head>
 
   <body>
@@ -153,128 +159,128 @@
             </p>
             <% if (!result.isCorrect) { %>
             <p>Correct Answer: <span class="text-success"><%= result.correctAnswer %></span></p>
+            <!-- Add the Help button here -->
+            <button id="help-button" onclick="sendToAIChat('<%= result.question %>')">Help</button>
             <% } %>
           </div>
           <% }); %>
         </div>
       </div>
 
-      <button id="helpButton"><i class="fas fa-question"></i></button>
-
-    <!-- Modal za pogovor z botom -->
-    <div id="chatModal">
+      <!-- Modal za pogovor z botom -->
+      <div id="chatModal">
         <button id="closeButton">&times;</button>
         <h2>Chat with bot</h2>
         <div id="chatBox"></div>
-        <input type="text" id="userInput" placeholder="Enter a question...">
+        <input type="text" id="userInput" placeholder="Enter a question..." />
         <button id="sendButton">Send</button>
+      </div>
     </div>
 
+    <!-- Footer Start -->
+    <div
+      class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn"
+      data-wow-delay="0.1s"
+    >
+      <div class="container py-5">
+        <div class="row g-5">
+          <div class="col-lg-3 col-md-6">
+            <h4 class="text-white mb-3">Quick Link</h4>
+            <a class="btn btn-link" href="">About Us</a>
+            <a class="btn btn-link" href="">Contact Us</a>
+            <a class="btn btn-link" href="">Privacy Policy</a>
+            <a class="btn btn-link" href="">Terms & Condition</a>
+            <a class="btn btn-link" href="">FAQs & Help</a>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <h4 class="text-white mb-3">Contact</h4>
+            <p class="mb-2">
+              <i class="fa fa-map-marker-alt me-3"></i>Koroška cesta 46, Maribor, Slovenia
+            </p>
+            <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+386 70 612 400</p>
+            <p class="mb-2"><i class="fa fa-envelope me-3"></i>edufun@gmail.com</p>
+            <div class="d-flex pt-2">
+              <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+              <a class="btn btn-outline-light btn-social" href=""
+                ><i class="fab fa-facebook-f"></i
+              ></a>
+              <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+              <a class="btn btn-outline-light btn-social" href=""
+                ><i class="fab fa-linkedin-in"></i
+              ></a>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <h4 class="text-white mb-3">Gallery</h4>
+            <div class="row g-2 pt-2">
+              <div class="col-4">
+                <img class="img-fluid bg-light p-1" src="/img/course-1.jpg" alt="" />
+              </div>
+              <div class="col-4">
+                <img class="img-fluid bg-light p-1" src="/img/course-2.jpg" alt="" />
+              </div>
+              <div class="col-4">
+                <img class="img-fluid bg-light p-1" src="/img/course-3.jpg" alt="" />
+              </div>
+              <div class="col-4">
+                <img class="img-fluid bg-light p-1" src="/img/course-2.jpg" alt="" />
+              </div>
+              <div class="col-4">
+                <img class="img-fluid bg-light p-1" src="/img/course-3.jpg" alt="" />
+              </div>
+              <div class="col-4">
+                <img class="img-fluid bg-light p-1" src="/img/course-1.jpg" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <h4 class="text-white mb-3">Newsletter</h4>
+            <p>Sign up with your mail, so you will be notified immidiately upon any update..</p>
+            <div class="position-relative mx-auto" style="max-width: 400px">
+              <input
+                class="form-control border-0 w-100 py-3 ps-4 pe-5"
+                type="text"
+                placeholder="Your email"
+              />
+              <form action="/">
+                <button
+                  type="submit"
+                  class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2"
+                >
+                  SignUp
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="copyright">
+          <div class="row">
+            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+              &copy; <a class="border-bottom" href="/">EduFun</a>, All Right Reserved.
 
+              <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+              Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+              <div class="footer-menu">
+                <a href="">Home</a>
+                <a href="">Cookies</a>
+                <a href="">Help</a>
+                <a href="">FQAs</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    <!-- Footer End -->
 
-   <!-- Footer Start -->
-   <div
-   class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn"
-   data-wow-delay="0.1s"
- >
-   <div class="container py-5">
-     <div class="row g-5">
-       <div class="col-lg-3 col-md-6">
-         <h4 class="text-white mb-3">Quick Link</h4>
-         <a class="btn btn-link" href="">About Us</a>
-         <a class="btn btn-link" href="">Contact Us</a>
-         <a class="btn btn-link" href="">Privacy Policy</a>
-         <a class="btn btn-link" href="">Terms & Condition</a>
-         <a class="btn btn-link" href="">FAQs & Help</a>
-       </div>
-       <div class="col-lg-3 col-md-6">
-         <h4 class="text-white mb-3">Contact</h4>
-         <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Koroška cesta 46, Maribor, Slovenia</p>
-         <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+386 70 612 400</p>
-         <p class="mb-2"><i class="fa fa-envelope me-3"></i>edufun@gmail.com</p>
-         <div class="d-flex pt-2">
-           <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
-           <a class="btn btn-outline-light btn-social" href=""
-             ><i class="fab fa-facebook-f"></i
-           ></a>
-           <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
-           <a class="btn btn-outline-light btn-social" href=""
-             ><i class="fab fa-linkedin-in"></i
-           ></a>
-         </div>
-       </div>
-       <div class="col-lg-3 col-md-6">
-         <h4 class="text-white mb-3">Gallery</h4>
-         <div class="row g-2 pt-2">
-           <div class="col-4">
-             <img class="img-fluid bg-light p-1" src="/img/course-1.jpg" alt="" />
-           </div>
-           <div class="col-4">
-             <img class="img-fluid bg-light p-1" src="/img/course-2.jpg" alt="" />
-           </div>
-           <div class="col-4">
-             <img class="img-fluid bg-light p-1" src="/img/course-3.jpg" alt="" />
-           </div>
-           <div class="col-4">
-             <img class="img-fluid bg-light p-1" src="/img/course-2.jpg" alt="" />
-           </div>
-           <div class="col-4">
-             <img class="img-fluid bg-light p-1" src="/img/course-3.jpg" alt="" />
-           </div>
-           <div class="col-4">
-             <img class="img-fluid bg-light p-1" src="/img/course-1.jpg" alt="" />
-           </div>
-         </div>
-       </div>
-       <div class="col-lg-3 col-md-6">
-         <h4 class="text-white mb-3">Newsletter</h4>
-         <p>Sign up with your mail, so you will be notified immidiately upon any update..</p>
-         <div class="position-relative mx-auto" style="max-width: 400px">
-           <input
-             class="form-control border-0 w-100 py-3 ps-4 pe-5"
-             type="text"
-             placeholder="Your email"
-           />
-          <form action="/">
-           <button
-             type="submit"
-             class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2"
-           >
-             SignUp
-           </button>
-           </form> 
-         </div>
-       </div>
-     </div>
-   </div>
-   <div class="container">
-     <div class="copyright">
-       <div class="row">
-         <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-           &copy; <a class="border-bottom" href="/">EduFun</a>, All Right Reserved.
-
-           <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-           Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
-         </div>
-         <div class="col-md-6 text-center text-md-end">
-           <div class="footer-menu">
-             <a href="">Home</a>
-             <a href="">Cookies</a>
-             <a href="">Help</a>
-             <a href="">FQAs</a>
-           </div>
-         </div>
-       </div>
-     </div>
-   </div>
- </div>
- <!-- Footer End -->
-
- <!-- Back to Top -->
- <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"
-   ><i class="bi bi-arrow-up"></i
- ></a>
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"
+      ><i class="bi bi-arrow-up"></i
+    ></a>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -288,6 +294,5 @@
     <script src="/js/main.js"></script>
 
     <script src="/js/aibot.js"></script>
-
   </body>
 </html>
