@@ -45,11 +45,13 @@
       }
   
       .question-item {
+        display: flex;
         background-color: #f8f9fa;
         border-radius: 10px;
         padding: 20px;
         margin-bottom: 20px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        justify-content: space-between;
       }
   
       .form-check {
@@ -165,7 +167,16 @@
               id="question-<%= qIndex %>"
               style="display: none"
             >
-              <h5 class="mb-3"><%= question.question %></h5>
+              <div class="d-flex justify-content-between w-100">
+                <!-- Vprašanje na levi strani -->
+                <div class="question-text">
+                  <h5 class="mb-3"><%= question.question %></h5>
+                </div>
+                <!-- Vrednost vprašanja na desni strani -->
+                <div class="question-value">
+                  <p>10 points</p>
+                </div>
+              </div>
               <% question.options.forEach((option, index) => { %>
               <div class="form-check">
                 <input
@@ -208,6 +219,11 @@
         </form>
       </div>
     </div>
+    
+    
+    
+    
+    
 
     <!-- Footer Start -->
   <div

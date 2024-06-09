@@ -66,6 +66,8 @@
         max-width: 800px;
         margin: 0 auto;
       }
+      
+
     </style>
   </head>
 
@@ -145,8 +147,10 @@
           <h6 class="section-title bg-white text-center text-primary px-3">
             Results for <%= quiz.title %>
           </h6>
-          <h1 class="mb-5">Your Score: <%= score %></h1>
+          <h1 class="mb-5">Your Score: <%= score %> / 50</h1>
         </div>
+
+        
         <div id="result-container">
           <% results.forEach(result => { %>
           <div class="result-item mb-4">
@@ -165,7 +169,12 @@
           </div>
           <% }); %>
         </div>
+        <div class="text-center">
+          <a href="/categories" class="btn btn-light btn-lg"><i class="fas fa-arrow-left me-2"></i>Back to Quizzes</a>
+        </div>
       </div>
+    </div>
+    
 
       <!-- Modal za pogovor z botom -->
       <div id="chatModal">
