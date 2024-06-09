@@ -101,7 +101,7 @@
           <h3>Your Progress</h3>
           <% categories.forEach(category => { %>
           <div class="category-progress">
-            <h4><%= category.name %></h4>
+            <h4><a href="/categories/<%= category.id %>"><%= category.name %></a></h4>
             <p>Score: <%= category.score %> points</p>
             <% if (category.level < 4) { %>
               <p>Points to next level: <%= category.pointsToNextLevel %></p>
