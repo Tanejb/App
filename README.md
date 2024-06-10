@@ -132,4 +132,4 @@ npm run dev
 ```
 
 ## 4. Uporaba aplikacije
-Aplikacije je dostopna na tej [povezavi](https://edufunclone.onrender.com/). Uporabnik se mora pred uporabo aplikacije na njej registrirati. Ko je opravil vse korake registracije, se lahko prijavi v aplikacijo in ob uspešni prijavi dobi dostop do aplikacije.
+Aplikacije je dostopna na tej [povezavi](https://edufun-2b02.onrender.com/). Uporabnik se mora pred uporabo aplikacije na njej registrirati. Ko je opravil vse korake registracije, se lahko prijavi v aplikacijo in ob uspešni prijavi dobi dostop do aplikacije.
