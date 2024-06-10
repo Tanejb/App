@@ -1,0 +1,24 @@
+EduFun
+
+EduFun je interaktivna spletna aplikacija, kjer uporabniki rešujejo kvize, zbirajo točke in pridobivajo povratne informacije ter pomoč od AIbota in drugih uporabnikov v spletni klepetalnici.
+
+Leto izdelave: 2024
+
+Tanej Buhin
+Amadej Buhin
+Oliver Kunovski 
+
+
+Domača stran: https://edufun-2b02.onrender.com/
+
+...
+Koda: https://github.com/Tanejb/EduFun.git
+
+Kategorizacija: spletna aplikacija
+
+Oznake: Firebase, HTML, NodeJS, EJS, GitHub, UporabaAI, Express, CSS...
+
+
+EduFun je spletna aplikacija, namenjena uporabnikom, ki želijo poglobiti svoje znanje na različnih področjih, kot so matematika, kemija in še veliko več. Uporabniki lahko rešujejo kvize, preverjajo svoje rezultate in pridobivajo povratne informacije ter mnenja drugih uporabnikov v spletni klepetalnici. Po vsakem rešenem kvizu imajo možnost vprašati AIbota o morebitnih nejasnostih, ki jim odgovori in pomaga razjasniti težave.
+
+Poleg reševanja kvizov lahko uporabniki spremljajo svoj profil, kjer zbirajo točke za vsako uspešno opravljeno nalogo. Več točk, kot zberejo, več kvizov lahko odklenejo, kar spodbuja nadaljnje učenje in raziskovanje novih tem. EduFun združuje učenje in interakcijo v prijetno in spodbudno izkušnjo, ki omogoča uporabnikom izboljšanje znanja ter izmenjavo idej in nasvetov z drugimi uporabniki.
