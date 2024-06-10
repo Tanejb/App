@@ -37,6 +37,7 @@
 
     <!-- Template Stylesheet -->
     <link href="/css/style.css" rel="stylesheet" />
+    <link href="/css/profile.css" rel="stylesheet" />
   </head>
 
   <body>
@@ -100,10 +101,18 @@
           <h3>Your Progress</h3>
           <% categories.forEach(category => { %>
           <div class="category-progress">
-            <h4><%= category.name %></h4>
+            <h4><a href="/categories/<%= category.id %>"><%= category.name %></a></h4>
             <p>Score: <%= category.score %> points</p>
-            <p>Level: <%= category.level %></p>
-            <p>Points to next level: <%= category.pointsToNextLevel %></p>
+            <% if (category.level < 4) { %>
+              <p>Points to next level: <%= category.pointsToNextLevel %></p>
+            <% } %>
+            <div class="progress-bar-container">
+              <span class="level-label">Level <%= category.level %></span>
+              <div class="progress-bar" data-score="<%= category.score %>" data-level="<%= category.level %>">
+                <div class="progress"></div>
+              </div>
+              <span class="level-label">Level <%= category.level < 4 ? category.level + 1 : 'Max' %></span>
+            </div>
           </div>
           <% }); %>
         </div>
@@ -222,5 +231,6 @@
 
     <!-- Template Javascript -->
     <script src="/js/main.js"></script>
+    <script src="/js/profile.js"></script>
   </body>
 </html>
